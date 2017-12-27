@@ -94,3 +94,11 @@ would be a good start though.
 
 
 [itertools-receipes]: https://docs.python.org/3/library/itertools.html#recipes
+
+### Templates and Reference Code
+
+Have some favorite resources that you search frequently,code that you are typing
+over and over, or want to build up a personal reference library?  This is where
+those kind of things would go.
+
+_Note: I have a large repo already on the system at: /Users/sully/Development/sandbox/ActiveState/code/recipes/Python_
