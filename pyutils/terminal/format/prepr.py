@@ -1,5 +1,19 @@
-# TODO:
-# - Add `ppd` and `ppl` convenience methods
+"""REPL shell utility methods to aid debugging/inspection of data structures
+
+Functions
+---------
+pi()
+    TODO: Give the deets
+
+ppl()
+    TODO: Give the deets
+
+ppd()
+    TODO: Give the deets
+
+ppsql()
+    TODO: Give the deets
+"""
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -114,6 +128,7 @@ def ppd(obj):
     pprint(dict(obj))
 
 
+# XXX: This doesn't belong here.
 def json_load(jsonfile):
     assert path.exists(jsonfile), "Failed to locate {}".format(jsonfile)
 
