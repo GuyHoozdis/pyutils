@@ -1,38 +1,23 @@
 # TODO:
 # - Add `ppd` and `ppl` convenience methods
 from __future__ import absolute_import
+from __future__ import print_function
 from __future__ import unicode_literals
 
+import json
 import os
+import re
 import sys
 
-# TODO: This is being replaced by the method "pi".  After it has shown to be
-# working properly, this can be removed.  2017/11/28
-def print_instance(instance, show_hidden=False, key_len=None):
-    key_value_sep = ' = '
-    format_member = (
-        "{:>{key_precision}}{key_value_sep}{:{value_precision}.{value_precision}}"
-    ).format
+from os import path
+from collections import namedtuple
+from pprint import pprint
 
-    _, columns = os.popen('stty size', 'r').read().split()
-    def _calculate_precision(attr_name, key_len):
-        value_len = int(columns) - (key_len + len(key_value_sep)) - 1
-        value_len = value_len - len(attr_name) if len(attr_name) > key_len else value_len
-        return {
-            'key_precision': key_len,
-            'value_precision': value_len,
-            'key_value_sep': key_value_sep,
-        }
+try: import sqlparse
+except ImportError: pass
+else: sqlparse = None
 
-    for attr_name in sorted(instance.__dict__.keys()):
-        if attr_name.startswith('_') and not show_hidden:
-            continue
-        attr_value = repr(instance.__dict__[attr_name])
-        # TODO: Use a fixed length for now (instead of respecting)
-        fixed_key_len = 20 if key_len is None else key_len
-        precision = _calculate_precision(attr_name, key_len=fixed_key_len)
-        msg = format_member(attr_name, attr_value, **precision)
-        print(msg)
+from .cprint import cprint
 
 
 def pi(instance, pattern=None, show_hidden=False, **kwargs):
@@ -55,8 +40,6 @@ def pi(instance, pattern=None, show_hidden=False, **kwargs):
     key_width       - Reserved space for displaying key.
     value_precision - The max width for displaying attribute values.
     """
-    import re
-    from collections import namedtuple
     if not hasattr(instance, '__dict__') or len(instance.__dict__) == 0:
         raise ValueError("Instance has no readable attributes")
 
@@ -103,10 +86,6 @@ def pi(instance, pattern=None, show_hidden=False, **kwargs):
         print(format_line(*format_args, **format_kwargs))
 
 
-# TODO:
-# - I don't recall why I had to switch the default from unicode to str, but
-#   that could probably be done in a more generic way.
-#def ppsql(query, chartype=unicode, ostream=sys.stdout, **overrides):
 def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
     """Pretty print SQL statements
 
@@ -115,43 +94,27 @@ def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
     ostream     - Anything that exposes a .write() method
     overrides   - Override the options passed to sqlparse.format()
     """
-    try:
-        import sqlparse
-    except ImportError:
-        sys.stderr.write("Requires sqlparse module to be installed\n")
-        return
-    try:
-        from sqlalchemy.sql import compiler
-    except ImportError:
-        sys.stderr.write("Requires sqlalchemy to be installed\n")
+    if not sqlparse:
+        # TODO: Left off here
+        cprint("{color.red}Requires sqlparse module to be installed{stop}", file=sys.stderr)
         return
 
     options = dict(reindent=True, keyword_case='upper')
-    options.update(overrides)
+    options.update(**overrides)
 
     formatted_statement = sqlparse.format(chartype(query.statement), **options)
-    ostream.write(formatted_statement + '\n')
+    print(formatted_statement, file=ostream)
 
-    # TODO: Trying to render SQL with parameters
-    #dialect = query.session.bind.dialect
-    #statement = query.statement
-    #comp = compiler.SQLCompiler(dialect, statement)
-    #comp.compile()
-    #enc = dialect.encoding
-    #params = {}
-    #for k, v in comp.params.iteritems():
-    #    if isinstance(v, unicode):
-    #        v.encode(enc)
-    #    params[k] = v
-    #statement_with_params = (comp.string.encode(enc) % params).decode(enc)
-    #formatted_statement = sqlparse.format(
-    #    chartype(statement_with_params), **options)
-    #ostream.write(formatted_statement + '\n')
+
+def ppl(obj):
+    pprint(list(obj))
+
+
+def ppd(obj):
+    pprint(dict(obj))
 
 
 def json_load(jsonfile):
-    import json
-    from os import path
     assert path.exists(jsonfile), "Failed to locate {}".format(jsonfile)
 
     # TODO: This should catch exceptions that occur when file is not JSON
