@@ -27,9 +27,10 @@ from os import path
 from collections import namedtuple
 from pprint import pprint
 
-try: import sqlparse
-except ImportError: pass
-else: sqlparse = None
+try:
+    import sqlparse
+except ImportError:
+    sqlparse = None
 
 from .cprint import cprint
 
