@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 __all__ = [
     # REPL/iPDB console utilities
-    'ppd', 'ppl', 'pi',
+    'ppd', 'ppl', 'pi', 'ppsql',
 
     # Colorized terminal output
     'cformat', 'cprint',
@@ -12,6 +12,6 @@ __all__ = [
 
 
 # REPL/iPDB console utilities
-from pyutils.terminal.format.prepr import ppd, ppl, pi
+from pyutils.terminal.format.prepr import ppd, ppl, pi, ppsql
 # Colorized terminal output
 from pyutils.terminal.format import cformat, cprint
