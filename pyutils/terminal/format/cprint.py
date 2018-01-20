@@ -20,6 +20,8 @@ import sys
 __all__ = ['cformat', 'cprint']
 
 
+NIL = 0
+
 TEXT_STYLES  = collections.OrderedDict([
     ('bold', 1),
     ('dark', 2),
@@ -37,7 +39,9 @@ FOREGROUND_COLORS = collections.OrderedDict([
     ('blue', 34),
     ('magenta', 35),
     ('cyan', 36),
-    ('white', 37)
+    ('white', 37),
+
+    ('stop', NIL),
 ])
 
 BACKGROUND_COLORS = collections.OrderedDict([
@@ -48,10 +52,11 @@ BACKGROUND_COLORS = collections.OrderedDict([
     ('on_blue', 44),
     ('on_magenta', 45),
     ('on_cyan', 46),
-    ('on_white', 47)
+    ('on_white', 47),
+
+    ('stop', NIL),
 ])
 
-NIL = 0
 
 
 def __format_terminal_code(code):
@@ -81,12 +86,18 @@ __TERMINAL_CODES = collections.OrderedDict([
     #('reset', NIL),
     #('stop', NIL),
     #('nil', NIL),
-    ('stop', __format_terminal_code(NIL)),
+    #('stop', __format_terminal_code(NIL)),
 ])
 
 
 def cformat(template, *args, **kwargs):
     """Colorized and styled formatting
+
+    >>> tmpl = "{color.red}This is very {}!{color.stop}"
+    >>> cformat(tmpl, "concerning")
+    '\x1b[31mThis is very concerning!\x1b[0m'
+    >>> print(cformat(tmpl, "important"))
+    This is very important!
     """
     kwargs.update(**__TERMINAL_CODES)
     return template.format(*args, **kwargs)
@@ -94,6 +105,10 @@ def cformat(template, *args, **kwargs):
 
 def cprint(template, sep=' ', end='\n', file=sys.stdout, *args, **kwargs):
     """Format colorized template and write to a stream
+
+    >>> tmpl = "{color.red}This is very {}!{color.stop}"
+    >>> cprint(tmpl, "impressive")
+    This is very impressive!
     """
     message = cformat(template, *args, **kwargs)
     print(message, sep=sep, end=end, file=file)
