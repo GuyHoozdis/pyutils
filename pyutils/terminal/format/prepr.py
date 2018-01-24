@@ -111,7 +111,7 @@ def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
     """
     if not sqlparse:
         # TODO: Left off here
-        cprint("{color.red}Requires sqlparse module to be installed{stop}", file=sys.stderr)
+        cprint("{color.red}Requires sqlparse module to be installed{color.stop}", file=sys.stderr)
         return
 
     options = dict(reindent=True, keyword_case='upper')
