@@ -110,14 +110,15 @@ def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
     overrides   - Override the options passed to sqlparse.format()
     """
     if not sqlparse:
-        # TODO: Left off here
-        cprint("{color.red}Requires sqlparse module to be installed{color.stop}", file=sys.stderr)
+        cprint(
+            "{color.red}Requires sqlparse module to be installed{color.stop}",
+            file=sys.stderr
+        )
         return
 
     options = dict(reindent=True, keyword_case='upper')
     options.update(**overrides)
-
-    formatted_statement = sqlparse.format(chartype(query.statement), **options)
+    formatted_statement = sqlparse.format(chartype(query), **options)
     print(formatted_statement, file=ostream)
 
 
