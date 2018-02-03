@@ -17,7 +17,7 @@ __all__ = [
 # REPL/iPDB console utilities
 from pyutils.terminal.format.prepr import ppd, ppl, pi, ppsql
 # Colorized terminal output
-from pyutils.terminal.format import cformat, cprint
+from pyutils.terminal.format.cprint import cformat, cprint
 #
 from pyutils.tradecraft.decorators import *
 #
