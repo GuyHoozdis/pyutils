@@ -1,4 +1,4 @@
-
+from six import iteritems
 
 # !!!: I'm still working on this idea, it's not fully realized yet.
 # The goals are:
@@ -24,7 +24,7 @@ def freeze_document(document):
         return [freeze_document(element) for element in document]
 
     def dict_handler(document):
-        sorted_elements = sorted(document.iteritems())
+        sorted_elements = sorted(iteritems(document))
         for attribute, subdocument in sorted_elements:
             document[attribute] = freeze_document(subdocument)
         return namedtuple(

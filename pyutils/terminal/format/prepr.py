@@ -26,6 +26,7 @@ import sys
 from os import path
 from collections import namedtuple
 from pprint import pprint
+from six import iteritems
 
 try:
     import sqlparse
@@ -33,6 +34,7 @@ except ImportError:
     sqlparse = None
 
 from .cprint import cprint
+
 
 
 def pi(instance, pattern=None, show_hidden=False, **kwargs):
@@ -89,7 +91,8 @@ def pi(instance, pattern=None, show_hidden=False, **kwargs):
 
     attributes = sorted([
         namedtuple('AttributeInfo', ['name', 'value', 'keylen'])(k, v, len(k))
-        for k, v in instance.__dict__.iteritems() if show_attribute(k)
+        #for k, v in instance.__dict__.iteritems() if show_attribute(k)
+        for k, v in iteritems(instance.__dict__) if show_attribute(k)
     ])
     if len(attributes) == 0:
         raise ValueError("No instance attributes met display criteria")
@@ -101,12 +104,12 @@ def pi(instance, pattern=None, show_hidden=False, **kwargs):
         print(format_line(*format_args, **format_kwargs))
 
 
-def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
+def ppsql(query, chartype=str, file=sys.stdout, **overrides):
     """Pretty print SQL statements
 
     query       - A string of SQL or SQLAlchemy query object
     chartype    - unicode, str, or ...
-    ostream     - Anything that exposes a .write() method
+    file        - Anything that exposes a .write() method
     overrides   - Override the options passed to sqlparse.format()
     """
     if not sqlparse:
@@ -119,7 +122,7 @@ def ppsql(query, chartype=str, ostream=sys.stdout, **overrides):
     options = dict(reindent=True, keyword_case='upper')
     options.update(**overrides)
     formatted_statement = sqlparse.format(chartype(query), **options)
-    print(formatted_statement, file=ostream)
+    print(formatted_statement, file=file)
 
 
 def ppl(obj):

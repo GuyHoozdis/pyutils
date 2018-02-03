@@ -2,6 +2,7 @@ import os
 import subprocess
 from collections import namedtuple
 from IPython.terminal.prompts import Prompts, Token
+from six import iteritems
 
 # LazyEvaluate
 #
@@ -84,7 +85,7 @@ class ShellPrompt(Prompts):
     HORIZONTAL = 'horizontal'
     STACKED = 'stacked'
     LAYOUT_OPTIONS = (OFF, ONELINE, HORIZONTAL, STACKED)
-    
+
     BRANCH = 'Branch'
     PYENV = 'PyEnv'
     APPENV = 'AppEnv'
@@ -122,7 +123,7 @@ class ShellPrompt(Prompts):
             self.config = self.defaults.copy()
             self.config.update({
                 key: _string_to_native(value)
-                for key, value in os.environ.iteritems()
+                for key, value in iteritems(os.environ)
                 if key.startswith('IPYSH_') and '' != value.strip()
             })
 

@@ -59,3 +59,16 @@ if __name__ == "__main__":
 
     print("You were about to call me?  I was about to call foo 2")
     foo2()
+
+    print("Do you work on clases too?")
+
+    @log_with(log)
+    class Foo(object):
+        def __init__(x, y=0): self._x, self._y = x, y
+        def bar(self): return self._y / 0
+        def baz(cls): return self._x / self._y
+        baz = classmethod(baz)
+        x = property('_x')
+
+    bar, baz = Foo(5), Foo(4, 0)
+    bar.x, baz.baz, baz.bar()

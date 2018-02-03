@@ -1,20 +1,25 @@
-#!/usr/bin/env python2
-"""Support colorized formatting and printing of text streams.
+# -*- coding: utf-8 -*-
+"""Colorized formatting and printing of text streams.
 
-Functions
----------
+TODO:
+    - Replace the OrderedDict collections with custom classes that derive
+      from ``enum.Enum``
+    - Implement ``Napolean Sphinx documentation plugin``_.
 
-cformat()
-    TODO: give the deets
 
-cprint()
-    TODO: give the deets
+.. _Napolean Sphinx documentation plugin:
+   https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
 """
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import collections
 import sys
+from six import iteritems
+
+try:
+    from itertools import izip as zip
+except ImportError:
+    pass
 
 
 __all__ = ['cformat', 'cprint']
@@ -28,7 +33,9 @@ TEXT_STYLES  = collections.OrderedDict([
     ('underline', 4),
     ('blink', 5),
     ('reverse', 7),
-    ('concealed', 8)
+    ('concealed', 8),
+
+    ('stop', NIL),
 ])
 
 FOREGROUND_COLORS = collections.OrderedDict([
@@ -64,7 +71,8 @@ def __format_terminal_code(code):
 
 
 def __make_terminal_code(codes, classname='TerminalCodes'):
-    (keys, values) = zip(*codes.iteritems())
+    #(keys, values) = zip(*codes.iteritems())
+    (keys, values) = zip(*iteritems(codes))
     return collections.namedtuple(classname, keys)(*[
         __format_terminal_code(value) for value in  values
     ])
