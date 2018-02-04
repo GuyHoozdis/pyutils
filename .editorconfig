@@ -20,9 +20,10 @@ trim_trailing_whitespace = false
 indent_size = 8
 indent_style = tab
 
-[COMMIT_EDITMSG]
-max_line_length = 72
-insert_final_newline = false
+# My editor does a better job
+#[COMMIT_EDITMSG]
+#max_line_length = 72
+#insert_final_newline = false
 
 [*.py]
 indent_size = 4
