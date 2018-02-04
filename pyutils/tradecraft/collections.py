@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import
+
+import itertools
+import operator
+
+from collections import Mapping
+from functools import partial
 from six import iteritems
 
 # !!!: I'm still working on this idea, it's not fully realized yet.
@@ -49,4 +57,35 @@ def freeze_document(document):
     return result
 
 
+class ChainMap(Mapping):
+    """An immutable multi-mapping container.
 
+    >>> import _abcoll, types, abc
+    >>> pylookup = ChainMap(locals(), globals(), vars(builtins))
+    >>> '_abcoll' in pylookup
+    True
+    >>> pylookup['_abcoll'].ABCMeta == abc.ABCMeta
+    True
+    """
+    def __init__(self, *maps, **extra):
+        self._list_of_mappings = maps
+        self._sentinel = extra.pop('sentinel', None)
+        self._defaults = extra
+
+    def __getitem__(self, key):
+        for mapping in iter(self._list_of_mappings):
+            if key in mapping:
+                return mapping[key]
+        else:
+            raise KeyError(key)
+
+    def __iter__(self):
+        return itertools.chain(*self._list_of_mappings)
+
+    def __len__(self):
+        return sum(len(m) for m in self._list_of_mappings)
+
+    def __repr__(self):
+        nmaps = len(self._list_of_mappings)
+        nkeys = sum(len(m) for m in self._list_of_mappings)
+        return '<ChainMap: {0} maps, {1} keys>'.format(nmaps, nkeys)
