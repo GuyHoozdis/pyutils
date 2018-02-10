@@ -56,12 +56,14 @@ def create_parser():
         epilog=epilog,
     )
     parser.add_argument(
-        "infile", type=argparse.FileType('r'), nargs='?', default=sys.stdin,
-        help="A file containing the curl commands copiedfrom Chrome Dev Tools"
+        "infile", type=argparse.FileType('r'), nargs=argparse.OPTIONAL,
+        help="A file containing the curl commands copiedfrom Chrome Dev Tools",
+        default=sys.stdin,
     )
     parser.add_argument(
-        'outfile', type=argparse.FileType('w'), nargs='?', default=sys.stdout,
+        'outfile', type=argparse.FileType('w'), nargs=argparse.OPTIONAL,
         help="Specify a file to write the output [default=stdout]",
+        default=sys.stdout,
     )
 
     return parser
