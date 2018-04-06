@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """REPL shell utility methods to aid debugging/inspection of data structures
 
 Functions
@@ -133,11 +134,3 @@ def ppd(obj):
     pprint(dict(obj))
 
 
-# XXX: This doesn't belong here.
-def json_load(jsonfile):
-    assert path.exists(jsonfile), "Failed to locate {}".format(jsonfile)
-
-    # TODO: This should catch exceptions that occur when file is not JSON
-    with open(jsonfile) as fp:
-        data = json.load(fp)
-    return data
