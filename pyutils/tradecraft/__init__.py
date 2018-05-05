@@ -9,6 +9,8 @@ from collections import namedtuple
 
 
 def nt_from_dict(name='Namespace', **kwargs):
+    """
+    """
     keys, values = zip(*kwargs.items())
     return namedtuple(name, keys)(*values)
 

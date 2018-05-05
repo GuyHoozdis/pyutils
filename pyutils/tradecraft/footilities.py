@@ -19,14 +19,20 @@ def timemachine(predicate, *iterable, **kwargs):
     distance = kwargs.get('distance')
     direction = kwargs.get('direction', 'backwards')
     assert isinstance(distance, (int, long, float, Decimal)), (
-        "Unsuported datatype {} for variable '{}'".format(
-            type(distance), 'distance'))
+        "Unsuported datatype {!r} for variable '{}'".format(
+            distance, 'distance',
+        )
+    )
     assert direction in ['forward', 'backward'], (
         "Invalid value '{}' for variable '{}'; should be one of {!r}".format(
-            direction, 'direction', ['forward', 'backward']))
+            direction, 'direction', ['forward', 'backward']
+        )
+    )
     assert callable(predicate), (
-        "The 'predicate' must be a callable that take one parameter")
+        "The 'predicate' must be a callable that take one parameter"
+    )
     assert isinstance(iterable, Iterable), "'iterable' must be just that..."
+
     def slice_genertor():
         window = deque(maxlen=distance)
         for element in iterable:
