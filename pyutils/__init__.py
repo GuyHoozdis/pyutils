@@ -21,7 +21,7 @@ from pyutils.tradecraft.testutils import DecimalEncoder, dump_docs
 
 Utilities = collections.namedtuple('Utilities', 'description utilities')
 
-data_inspection_utilities = Utilities(
+data_inspection = Utilities(
     "Object inspection utilities",
     ('ppd', 'ppl', 'pi', 'ppsql', 'dump_docs',)
 )
@@ -41,6 +41,7 @@ fooiter = Utilities(
 
 __all__ = ['footilities'] + [
     util for util in itertools.chain(
+        data_inspection.utilities,
         data_structures.utilities,
         io_utilities.utilities,
         data_structures.utilities,
