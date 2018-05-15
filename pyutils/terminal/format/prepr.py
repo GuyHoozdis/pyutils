@@ -119,10 +119,15 @@ def ppsql(query, chartype=str, file=sys.stdout, **overrides):
             file=sys.stderr
         )
         return
-
     options = dict(reindent=True, keyword_case='upper')
     options.update(**overrides)
-    formatted_statement = sqlparse.format(chartype(query), **options)
+    statement = query.statement.compile(compile_kwargs={"literal_binds": True})
+    try:
+        formatted_statement = sqlparse.format(chartype(statement), **options)
+    except Exception as ex:
+        msg = "{color.red}Failed to bind literals; {color.cyan}{}{color.stop"
+        cprint(msg, ex, file.sys.stderr)
+        formatted_statement = sqlparse.format(chartype(query), **options)
     print(formatted_statement, file=file)
 
 
