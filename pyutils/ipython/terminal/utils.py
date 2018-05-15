@@ -48,33 +48,20 @@ def step_into(entrypoint, *args, **kwargs):
     return entrypoint(*args, **kwargs)
 
 
-# These are the command definitions that used to be in my .pdbrc file.
-#
-# ```
-# alias trace locals()['frame']=[frame for frame in traceback.extract_stack() \
-#    if os.path.basename(frame[0]).startswith("test_")][0]
-# alias print_trace print traceback.format_list([locals()["frame"]])[0]
-# ```
-#
-#
-# The port isn't working yet...
-# -----------------------------------------------------------------------------
-# ipdb> from pyutils.ipython.terminal.utils import which_test
-# ipdb> which_test
-# <function which_test at 0x106577cf8>
-# ipdb> which_test()
-# *** ValueError: too many values to unpack
-# ipdb>
-# -----------------------------------------------------------------------------
 def which_test():
-    #locals()['frame'] = [
+    """Find the most recent calling test on the stack.
+    """
     frames_with_prefix_test = [
         frame for frame in traceback.extract_stack()
         if path.basename(frame[0]).startswith("test_")
     ]
     assert frames_with_prefix_test, "Failed to locate any candidate frames"
 
-    # TODO: I just transformed what used to be two commands in .pdbrc into this
-    # single command, but I haven't actually tried to use it yet.
-    tbdata = traceback.format_list(frames_with_prefix_test[0])
+    # TODO:
+    # - Return an object instead of printing a string or maybe optionally
+    #   return an object instead of printing.
+    # - Take parameters on how to format rendered output.
+    # - Wrap some of the elements with utilities (e.g. Parse the basename,
+    #   relative path, or ... out of the first element.
+    tbdata = traceback.format_list(frames_with_prefix_test)
     print(tbdata[0])
