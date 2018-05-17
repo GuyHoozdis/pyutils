@@ -31,6 +31,7 @@ Output easy to fine log messages when there is a deluge of log output.
 - Markers add context to the log output that immediately follows
 - Markers can be in color for console use
 - Markers can be without escape codes / colors in log files - grepable
+- Optionally include frame / stack info
 
 ```python
 import pyutils, functools
