@@ -122,6 +122,56 @@ def cprint(template, sep=' ', end='\n', file=sys.stdout, *args, **kwargs):
     print(message, sep=sep, end=end, file=file)
 
 
+# TODO: Not sure this is the best place for this... just need it now.
+import functools
+def print_marker(message, *args, **kwargs):
+    default_marker_template = (
+        "{color.red}{style.bold}MARKER{style.stop}"
+        "{color.white}: "
+        "{color.green}{message}{color.stop}"
+    )
+    sep = kwargs.pop('sep', ' ')
+    end = kwargs.pop('end', '\n')
+    file = kwargs.pop('file', sys.stdout)
+    marker_template = kwargs.pop('marker_template', default_marker_template)
+    format_marker = functools.partial(pyutils.cformat, marker_template)
+
+    msg = message.format(*args, **kwargs)
+    mark = marker_template(message=msg)
+    print(mark, file=sys.stderr)
+
+
+# I think I might like this better than the method.
+# TODO:
+# - Give the ability to render with or without color.
+# - Stack / traceback info
+# - Be a breakpoint?  Mark somewhere, run, exception happens, next run breaks
+#   before exception... idk... pretty dreamy.
+class IOStreamMarker(object):
+    _default_marker_template = (
+        "{color.red}{style.bold}MARKER{style.stop}"
+        "{color.white}: "
+        "{color.green}{message}{color.stop}"
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.sep = kwargs.pop('sep', ' ')
+        self.end = kwargs.pop('end', '\n')
+        self.ostream = kwargs.pop('file', sys.stdout)
+        self.marker_template = kwargs.pop(
+            'marker_template',
+            self._default_marker_template
+        )
+
+    def __call__(self, message, *args, **kwargs):
+        sep = kwargs.pop('sep', self.sep)
+        end = kwargs.pop('end', self.end)
+        ostream = kwargs.pop('file', self.ostream)
+
+        msg = message.format(*args, **kwargs)
+        mark = cformat(self.marker_template, message=msg)
+        print(mark, sep=sep, end=end, file=ostream)
+
 def demo():
     import os
     from pprint import pformat
