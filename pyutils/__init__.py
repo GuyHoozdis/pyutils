@@ -12,7 +12,7 @@ import operator
 from pyutils.terminal.format.prepr import ppd, ppl, pi, ppsql
 from pyutils.terminal.format.cprint import cformat, cprint
 from pyutils.tradecraft import nt_from_dict, trace_factory
-from pyutils.tradecraft.collections import ChainMap
+from pyutils.tradecraft.datastructures import ChainMap
 from pyutils.tradecraft.decorators import inspect_method
 from pyutils.tradecraft import footilities
 from pyutils.tradecraft.loggers import log_with
