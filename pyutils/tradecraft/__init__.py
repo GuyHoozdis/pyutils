@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import contextlib
 import logging
 import io
+import string
 
 from collections import namedtuple
 
@@ -11,8 +12,16 @@ from collections import namedtuple
 def nt_from_dict(name='Namespace', **kwargs):
     """
     """
-    keys, values = zip(*kwargs.items())
+    items = kwargs.items()
+    keys, values = zip(*items)
     return namedtuple(name, keys)(*values)
+
+
+def nt_from_list(name='Namespace', transform=string.upper, *values):
+    transform = lambda x: x if transform is None else transform
+    assert callable(transform), "The transform parameter must be callable"
+    data = {transform(v): v for v in values}
+    return nt_from_dict(**data)
 
 
 @contextlib.contextmanager

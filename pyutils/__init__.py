@@ -12,7 +12,7 @@ import operator
 from pyutils.terminal.autostatus import AutoStatusUpdateGenerator
 from pyutils.terminal.format.prepr import ppd, ppl, pi, ppsql
 from pyutils.terminal.format.cprint import cformat, cprint
-from pyutils.tradecraft import nt_from_dict, trace_factory
+from pyutils.tradecraft import nt_from_dict, nt_from_list, trace_factory
 from pyutils.tradecraft.datastructures import ChainMap
 from pyutils.tradecraft.decorators import inspect_method
 from pyutils.tradecraft import footilities
@@ -32,7 +32,7 @@ io_utilities = Utilities(
 )
 data_structures = Utilities(
     "Data structures and factories",
-    ('ChainMap', 'nt_from_dict',)
+    ('ChainMap', 'nt_from_dict', 'nt_from_list')
 )
 fooiter = Utilities(
     "All the itertools",
