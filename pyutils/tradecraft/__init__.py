@@ -4,24 +4,51 @@ from __future__ import absolute_import
 import contextlib
 import logging
 import io
+import itertools
 import string
 
 from collections import namedtuple
 
 
 def nt_from_dict(name='Namespace', **kwargs):
-    """
+    """Create a mapping contained within this constrained scope.
     """
     items = kwargs.items()
     keys, values = zip(*items)
     return namedtuple(name, keys)(*values)
 
 
-def nt_from_list(name='Namespace', transform=string.upper, *values):
-    transform = lambda x: x if transform is None else transform
+def nt_from_list(*values, **meta):
+    """Given an iterable collection of values,
+
+    >>> import decimal, string
+    >>> nt_from_list('ios', 'android', name='Platform', transform=string.upper)
+    Platform(IOS='ios', ANDROID='android')
+
+    >>> nt_from_list(
+            '10', '100', '1000', '10000',
+            name='LogScale',
+            transform="L{}".format,
+            value_type=decimal.Decimal,
+        )
+    LogScale(L10=Decimal('10'), L100=Decimal('100'), L1000=Decimal('1000'))
+    """
+    name = meta.get('name', 'Enumeration')
+    transform = meta.get('transform', string.upper)
+    value_type = meta.get('value_type', unicode)
+
+    # TODO:
+    # - Allow the iterable `values` to be a list key-value pairs
+    # - If `value_type` is explicitly given as `None`, then do not change
+    # - If `transform` is explicitly given as `None`, then do not change
+    name_error = "The 'name' parameter must be a non-empty string value"
+    assert name and isinstance(name, basestring), name_error
     assert callable(transform), "The transform parameter must be callable"
-    data = {transform(v): v for v in values}
-    return nt_from_dict(**data)
+    assert callable(value_type), "The value_type must be a constructor"
+
+    items = [(transform(v), value_type(v)) for v in values]
+    keys, values = zip(*items)
+    return namedtuple(name, keys)(*values)
 
 
 @contextlib.contextmanager
