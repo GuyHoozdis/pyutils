@@ -136,6 +136,9 @@ def ppl(obj):
 
 
 def ppd(obj):
-    pprint(dict(obj))
-
+    try:
+        data = dict(obj)
+    except TypeError:
+        data = vars(obj)
+    pprint(data)
 
