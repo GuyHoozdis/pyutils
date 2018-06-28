@@ -56,10 +56,15 @@ def trace_factory(ostream=None, logger_name='factory', loglevel=logging.DEBUG):
     """A context manager for examining the internals of FactoryBoy factories.
 
     >>> with trace_factory() as monitor:
-    ...     some_object = SomeObjectFactory()
+    ...     some_model = SomeModelFactory()
     ...     # ...
     ...
     >>> lines = monitor.ostream.getvalue()
+
+    >>> ostream = open('output.log', 'a+')
+    >>> with trace_factory(ostream=ostream) as monitor:
+    ...     some_model = SomeModelFactory()
+    ... ostream.close()
     """
     factory_logger = logging.getLogger(logger_name)
     previous_loglevel = factory_logger.level
@@ -69,7 +74,7 @@ def trace_factory(ostream=None, logger_name='factory', loglevel=logging.DEBUG):
     factory_logger.addHandler(handler)
     factory_logger.setLevel(loglevel)
 
-    yield namedtuple("DebugOutput", 'logger ostream')(factory_logger, file)
+    yield namedtuple("DebugOutput", 'logger ostream')(factory_logger, ostream)
 
     factory_logger.setLevel(previous_loglevel)
     factory_logger.removeHandler(handler)
