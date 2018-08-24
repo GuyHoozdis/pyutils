@@ -8,6 +8,7 @@ import traceback
 
 from os import path
 
+
 json_loads = json.loads
 json_dumps = json.dumps
 
@@ -29,11 +30,12 @@ def json_load(jsonfile, mode='r', **kwargs):
 def json_dump(obj, jsonfile, mode='w', force=False, **kwargs):
     errmsg = "File {} already exists. Set force=True to overwrite."
     file_exists = path.isfile(jsonfile)
-    _ = os.remove(jsonfile) if file_exists and force else None
-    assert not file_exists, errmsg.format(jsonfile)
+    if file_exists and not force:
+        raise Exception(errmsg.format(jsonfile))
 
+    config = dict([('default', str),], **kwargs)
     with open(jsonfile, mode) as fp:
-        json.dump(obj, fp, **kwargs)
+        json.dump(obj, fp, **config)
 
 
 def step_into(entrypoint, *args, **kwargs):
