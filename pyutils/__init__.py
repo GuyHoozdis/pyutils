@@ -18,17 +18,19 @@ from pyutils.tradecraft.decorators import inspect_method
 from pyutils.tradecraft import footilities
 from pyutils.tradecraft.loggers import log_with
 from pyutils.tradecraft.testutils import DecimalEncoder, dump_docs
+from pyutils.ipython.terminal.utils import json_load, json_dump, step_into
 
 
 Utilities = collections.namedtuple('Utilities', 'description utilities')
 
 data_inspection = Utilities(
     "Object inspection utilities",
-    ('ppd', 'ppl', 'pi', 'ppsql', 'dump_docs',)
+    ('ppd', 'ppl', 'pi', 'ppsql', 'dump_docs', 'json_load', 'json_dump')
 )
 io_utilities = Utilities(
     "Logging, output, and data dump helpers",
-    ('cformat', 'cprint', 'log_with', 'trace_factory', 'DecimalEncoder',)
+    ('cformat', 'cprint', 'log_with', 'step_into', 'trace_factory',
+     'DecimalEncoder',)
 )
 data_structures = Utilities(
     "Data structures and factories",
