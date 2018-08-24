@@ -6,8 +6,10 @@ from __future__ import absolute_import, print_function
 import json
 import traceback
 
-from ipdb import sset_trace
 from os import path
+
+json_loads = json.loads
+json_dumps = json.dumps
 
 
 def json_load(jsonfile, mode='r', **kwargs):
@@ -44,7 +46,7 @@ def step_into(entrypoint, *args, **kwargs):
         "Entrypoint {} is not callable!  That's going to be an issue."
     ).format(entrypoint)
 
-    sset_trace()
+    import ipdb; ipdb.sset_trace();  # Breakpoint
     return entrypoint(*args, **kwargs)
 
 
