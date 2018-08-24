@@ -20,7 +20,6 @@ def json_load(jsonfile, mode='r', **kwargs):
     errmsg = "Failed to locate {}."
     assert path.exists(jsonfile), errmsg.format(jsonfile)
 
-    # TODO: Should this catch exceptions?
     with open(jsonfile, mode) as fp:
         data = json.load(fp, **kwargs)
 
@@ -29,9 +28,10 @@ def json_load(jsonfile, mode='r', **kwargs):
 
 def json_dump(obj, jsonfile, mode='w', force=False, **kwargs):
     errmsg = "File {} already exists. Set force=True to overwrite."
-    assert path.exists(jsonfile) and not force, errmsg.format(jsonfile)
+    file_exists = path.isfile(jsonfile)
+    _ = os.remove(jsonfile) if file_exists and force else None
+    assert not file_exists, errmsg.format(jsonfile)
 
-    # TODO: Should this catch exceptions?
     with open(jsonfile, mode) as fp:
         json.dump(obj, fp, **kwargs)
 
