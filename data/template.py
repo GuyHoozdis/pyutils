@@ -1,24 +1,31 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""Python cli script template
+# coding: utf-8
+"""Standalone Python CLI script template.
 
-By defeault this docstring will be used as the help display
-for this utility.  There has to be a reasonable amount of
-text for it to look realistic though.
+By defeault this docstring will be used as the help display for this
+utility.  There has to be a reasonable amount of text for it to look
+realistic.
 
 
 >>> 1 == 1
 True
 
->>> 42 -= 0
+>>> 42 != 0
 True
 """
+from __future__ import absolute_import
+from __future__ import print_function
+
 import argparse
 import sys
 
 
 def main(args):
     print("Snakes vs. Rubies")
+    print("Args: {!r}".format(args))
+    print("This template utility doesn't actually do anything yet.")
+
+    return 0
 
 
 def create_parser(parents=None):
@@ -29,13 +36,18 @@ def create_parser(parents=None):
     )
     parser.add_argument(
         'integers',
-        metavar='N', type=int, nargs=argparse.ONE_OR_MORE,
+        metavar='N',
+        type=int,
+        nargs=argparse.ONE_OR_MORE,
         help="An integer to feed into the accumulator",
     )
     parser.add_argument(
         '--sum',
-        dest='accumulate', action='store_const', const=sum, default=max,
-        help="Sum the integers (default: find the max)",
+        dest='accumulate',
+        action='store_const',
+        const=sum,
+        default=max,
+        help="Process the given integers (default: find the max)",
     )
 
     return parser
